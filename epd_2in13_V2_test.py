@@ -26,34 +26,34 @@ try:
     # read bmp file 
     logging.info("1.read bmp file...")
     image = Image.new('1', (epd.height, epd.width), 255) 
-    bmp = Image.open('test.bmp')
-    image.paste(bmp, (2,2))
+    bmp = Image.open('test.png')
+    image.paste(bmp, (0,0))
     epd.display(epd.getbuffer(image))
-    time.sleep(10)
+    time.sleep(2)
     
     # epd.Clear(0xFF)
-    logging.info("Clear...")
-    epd.init(epd.FULL_UPDATE)
-    epd.Clear(0xFF)
-    epd.sleep()
+  #  logging.info("Clear...")
+  #  epd.init(epd.FULL_UPDATE)
+  #  epd.Clear(0xFF)
+  #  epd.sleep()
     
      # # partial update
-    logging.info("4.show time...")
-    time_image = Image.new('1', (epd.height, epd.width), 255)
-    time_draw = ImageDraw.Draw(time_image)
+  #  logging.info("4.show time...")
+   # time_image = Image.new('1', (epd.height, epd.width), 255)
+   # time_draw = ImageDraw.Draw(time_image)
     
-    epd.init(epd.FULL_UPDATE)
-    epd.displayPartBaseImage(epd.getbuffer(time_image))
+   # epd.init(epd.FULL_UPDATE)
+   # epd.displayPartBaseImage(epd.getbuffer(time_image))
     
-    epd.init(epd.PART_UPDATE)
-    num = 0
-    while (True):
-        time_draw.rectangle((120, 80, 220, 105), fill = 255)
-        time_draw.text((120, 80), time.strftime('%H:%M:%S'), font = font24, fill = 0)
-        epd.displayPartial(epd.getbuffer(time_image))
-        num = num + 1
-        if(num == 10):
-            break
+   # epd.init(epd.PART_UPDATE)
+   # num = 0
+   # while (True):
+   #     time_draw.rectangle((120, 80, 220, 105), fill = 255)
+   #     time_draw.text((120, 80), time.strftime('%H:%M:%S'), font = font24, fill = 0)
+   #     epd.displayPartial(epd.getbuffer(time_image))
+   #     num = num + 1
+   #     if(num == 10):
+   #         break
     
     # epd.Clear(0xFF)
         
