@@ -26,36 +26,31 @@ try:
     # read bmp file 
     logging.info("1.read bmp file...")
     image = Image.new('1', (epd.height, epd.width), 255) 
+    draw = ImageDraw.Draw(image)
     bmp = Image.open('test.png')
     image.paste(bmp, (0,0))
-    epd.display(epd.getbuffer(image))
+    epd.displayPartBaseImage(epd.getbuffer(image))
     time.sleep(2)
+
+    # Drawing on the image
+    font15 = ImageFont.truetype(('Font.ttc'), 15)
+    font24 = ImageFont.truetype(('Font.ttc'), 24)
+       
+    epd.init(epd.PART_UPDATE)
+    num = 0
+    while (True):
+        draw.rectangle((0, 87, 250, 122), fill = 255)
+        draw.text((54, 96), 'BTC: ${0:,.2f}'.format(40000.00+num), font = font24, fill = 0)
+        epd.displayPartial(epd.getbuffer(image))
+        num = num + 1
+        if(num == 10):
+            break
+        time.sleep(1)
     
-    # epd.Clear(0xFF)
-  #  logging.info("Clear...")
-  #  epd.init(epd.FULL_UPDATE)
-  #  epd.Clear(0xFF)
-  #  epd.sleep()
-    
-     # # partial update
-  #  logging.info("4.show time...")
-   # time_image = Image.new('1', (epd.height, epd.width), 255)
-   # time_draw = ImageDraw.Draw(time_image)
-    
-   # epd.init(epd.FULL_UPDATE)
-   # epd.displayPartBaseImage(epd.getbuffer(time_image))
-    
-   # epd.init(epd.PART_UPDATE)
-   # num = 0
-   # while (True):
-   #     time_draw.rectangle((120, 80, 220, 105), fill = 255)
-   #     time_draw.text((120, 80), time.strftime('%H:%M:%S'), font = font24, fill = 0)
-   #     epd.displayPartial(epd.getbuffer(time_image))
-   #     num = num + 1
-   #     if(num == 10):
-   #         break
-    
-    # epd.Clear(0xFF)
+    time.sleep(30)
+    logging.info("Clear...")
+    epd.init(epd.FULL_UPDATE)
+    epd.Clear(0xFF)
         
 except IOError as e:
     logging.info(e)
