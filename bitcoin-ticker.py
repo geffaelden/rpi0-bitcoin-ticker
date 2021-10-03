@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-# coding: utf-8
-
-# In[62]:
-
-
 from pycoingecko import CoinGeckoAPI
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -11,22 +6,18 @@ from matplotlib.ticker import FuncFormatter
 
 import sys
 import os
-#libdir = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'lib')
-#if os.path.exists(libdir):
-#    sys.path.append(libdir)
+libdir = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'lib')
+if os.path.exists(libdir):
+    sys.path.append(libdir)
     
 import logging
-#from waveshare_epd import epd2in13_V2
+from waveshare_epd import epd2in13_V2
 import time
 from PIL import Image, ImageDraw, ImageFont
 import traceback
 
-#logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 cg = CoinGeckoAPI()
-
-
-# In[23]:
-
 
 def get_chart_prices():
     prices = cg.get_coin_market_chart_range_by_id(id='bitcoin',vs_currency='usd',from_timestamp=int(datetime.now().timestamp())-86400,to_timestamp=int(datetime.now().timestamp()))
@@ -66,9 +57,6 @@ def crop_image(path='chart.png'):
     
     w, h = image.size
     image.crop((13,9,w-17,h-15)).save('chart_cropped.png')
-
-
-# In[67]:
 
 
 try:
