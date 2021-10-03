@@ -77,8 +77,6 @@ try:
     time.sleep(1)
     crop_image()
     
-    # start partial updates
-    epd.init(epd.PART_UPDATE)
     # read bmp file 
         
     logging.info("read chartfile file...")
@@ -88,31 +86,36 @@ try:
     image.paste(bmp, (0,0))
     epd.displayPartBaseImage(epd.getbuffer(image))
     time.sleep(2)
-      
+
+    epd.init(epd.PART_UPDATE)  
     num = 0 
     while (True):
+        if num >= 5:
+            
+            x, y = get_chart_prices()
+            gen_graph(x, y)
+            time.sleep(1)
+            crop_image()
+            
+            image = Image.new('1', (epd.height, epd.width), 255) 
+            draw = ImageDraw.Draw(image)
+            bmp = Image.open('chart_cropped.png')
+            image.paste(bmp, (0,0))
+            epd.displayPartBaseImage(epd.getbuffer(image))
+            time.sleep(2)
+            
+            num = 0
+
+        # start partial update
+    
         price_now = cg.get_exchange_rates()['rates']['usd']['value']
         
         draw.rectangle((0, 96, 250, 122), fill = 255)
         draw.text((54, 96), 'BTC: ${0:,.2f}'.format(price_now), font = font24, fill = 0)
         epd.displayPartial(epd.getbuffer(image))
         num = num + 1
-        
-        if num >= 5:
-            x, y = get_chart_prices()
-            gen_graph(x, y)
-            time.sleep(1)
-            crop_image()
-            
-            draw.rectangle((0, 96, 250, 122), fill = 255)
-            bmp = Image.open('chart_cropped.png')
-            image.paste(bmp, (0,0))
-            epd.displayPartial(epd.getbuffer(image))
-            
-            num = 0
-            time.sleep(59)
-        else:
-            time.sleep(60)
+
+        time.sleep(60)   
             
 except IOError as e:
     logging.info(e)
